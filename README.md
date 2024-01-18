@@ -43,7 +43,7 @@ We propose SceneVerse, the first million-scale 3D vision-language dataset with 6
 @article{jia2024sceneverse,
   title={SceneVerse: Scaling 3D Vision-Language Learning for Grounded Scene Understanding},
   author={Jia, Baoxiong and Chen, Yixin and Yu, Huangyue and Wang, Yan and Niu, Xuesong and Liu, Tengyu and Li, Qing and Huang, Siyuan},
-  journal={arXiv},
+  journal={arXiv preprint arXiv:2401.09340},
   year={2024}
 }
 ```
