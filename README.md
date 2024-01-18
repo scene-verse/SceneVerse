@@ -17,7 +17,7 @@
 &nbsp;
 
 <div align="center">
-    <a href="https://arxiv.org" target="_blank">
+    <a href="https://arxiv.org/abs/2401.09340" target="_blank">
     <img src="https://img.shields.io/badge/Paper-arXiv-deepgreen" alt="Paper arXiv"></a>
     <a href="https://scene-verse.github.io" target="_blank">
     <img src="https://img.shields.io/badge/Project-Page-9cf" alt="Project Page"></a>
