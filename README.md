@@ -34,10 +34,11 @@
 <img src="assets/overview.png" width="99%" alt="SceneVerse Teaser">
 </div>
 
-We propose SceneVerse, the first million-scale 3D vision-language dataset
-        with 68K 3D indoor scenes and 2.5M vision-language pairs. 
-        We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities
-        with our GPS (Grounded Pre-training for Scenes) model.
+We propose SceneVerse, the first million-scale 3D vision-language dataset with 68K 3D indoor scenes and 2.5M vision-language pairs.  We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities with our GPS (Grounded Pre-training for Scenes) model.
+
+## TODO
+- [ ] Update arXiv link after arXiv publish.
+        
 
 
 ## BibTex
