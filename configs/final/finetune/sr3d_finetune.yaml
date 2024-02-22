@@ -1,0 +1,256 @@
+# Experiment general info
+name: "FinalOVFinetune"
+rng_seed: 42
+num_gpu: 2
+mode: "train"
+note: ""
+# Choose keywords to feature your saving directory
+naming_keywords: ["dataloader.batchsize", "task", "note", "time"]
+base_dir: "/scratch/masaccio/results"
+exp_dir: ""
+save_frequency: 10
+
+resume: False
+
+debug:
+  flag: False
+  debug_size: 20
+  hard_debug: False
+
+logger:
+  name: "wandb"
+  entity: "bigai-gvl"
+
+# dataset details
+data:
+  note: "sr3d_whead"
+  train: ['ScanNetSpatialRefer']
+  val: ['ScanNetSpatialRefer']
+  test: ['ScanNetSpatialRefer']
+  args:
+    max_obj_len: 80
+    max_seq_len: 50
+    num_points: 1024
+    pc_type: 'gt'
+    sem_type: '607'
+    filter_lang: False
+    txt_mask_ratio: 0.15
+    pc_mask_ratio: 0.1
+    rot_aug: True
+    mask_strategy: random
+  ScanNetSpatialRefer:
+    train:
+      sources: ['referit3d']
+      referit3d:
+        anno_type: ['sr3d'] # 'nr3d', 'sr3d'
+        sr3d_plus_aug: False
+      sgrefer:
+        anno_type: ['chain_gpt', 'chain_template', 'rel2_template', 'relm_template', 'star_template'] #
+      sgcaption:
+        anno_type: ['gpt']
+    val:
+      sources: ['referit3d']
+      referit3d:
+        anno_type: ['sr3d'] # 'nr3d', 'sr3d'
+        sr3d_plus_aug: False
+      sgrefer:
+        anno_type: ['template'] # 'template', 'gpt_chain'
+      sgcaption:
+        anno_type: ['gpt']
+    test:
+      sources: ['referit3d']
+      referit3d:
+        anno_type: ['sr3d'] # 'nr3d', 'sr3d'
+        sr3d_plus_aug: False
+      sgrefer:
+        anno_type: ['template'] # 'template', 'gpt', 'gpt_chain'
+      sgcaption:
+        anno_type: ['gpt']
+  RScanSpatialRefer:
+    train:
+      sources: [ 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template', 'star_gpt' ]
+    val:
+      sources: [ 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template', 'star_gpt' ]
+    test:
+      sources: [ 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template', 'star_gpt' ]
+  MultiScanSpatialRefer:
+    train:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template', 'star_gpt' ]
+    val:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template', 'star_gpt' ]
+    test:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template', 'star_gpt' ]
+  ARKitSceneSpatialRefer:
+    train:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template' ]
+    val:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template' ]
+    test:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template' ]
+  HMSpatialRefer:
+    train:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template' ]
+    val:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template' ]
+    test:
+      sources: [ 'anno', 'chain_template', 'rel2_template', 'relm_gpt', 'relm_template', 'star_template' ]
+  use_voxel: False
+  scan_family_base: "/scratch/masaccio/existing_datasets/scannet"
+  rscan_base: "/scratch/masaccio/existing_datasets/3RScan-base"
+  arkitscene_base: '/scratch/masaccio/existing_datasets/ARKitScenes'
+  multiscan_base: '/scratch/masaccio/existing_datasets/multiscan'
+  hm_base: '/scratch/masaccio/existing_datasets/HM3D'
+
+data_aug:
+  aug_list: ['scene_aug']
+  scene_aug:
+    translation:
+      enabled: False
+      value: [1.0, 1.0, 1.0]
+      p: 1.0
+    scaling:
+      enabled: False
+      p: 1.0
+      value: [0.9, 1.1]
+    flip:
+      enabled: False
+      p: 0.5
+    rotation:
+      enabled: True
+      p: 1.0
+      axis_align: True
+      value: [0.0, 0.0, 1.0]
+      shuffle: True
+    color_jitter: False
+    order_shuffle: False
+  obj_aug:
+    translation:
+      enabled: False
+      value: [0.1, 0.1, 0.1]
+      p: 1.0
+    rotation:
+      enabled: True
+      p: 1.0
+      axis_align: False
+      value: [0.0, 0.0, 0.1]
+      shuffle: True
+    random_jitter:
+      enabled: True
+      value: 0.01
+      accord_to_size: False
+      p: 1.0
+    pts_shuffle: True
+
+# task details: 'Pretrain', 'scanqa', 'spatialrefer'
+task: 'Pretrain'
+# 'MaskDatasetWrapper', 'ScanFamilyDatasetWrapper', 'MaskMVDatasetWrapper'
+data_wrapper:
+  train: 'ScanFamilyDatasetWrapperOld'
+  val: 'ScanFamilyDatasetWrapperOld'
+  test: 'ScanFamilyDatasetWrapperOld'
+
+# Training details
+trainer: "OpenVocabTrainer"
+ckpt_path: ""
+pretrain_ckpt_path: ""
+
+# dataloader details
+dataloader:
+  # This is a per-gpu batchsize
+  batchsize: 256
+  num_workers: 4
+  balance_dataset: False
+  filter_empty_annotations: False
+
+solver:
+  gradient_accumulation_steps: 1
+  epochs_per_save: 50
+  epochs_per_eval: 1
+  lr: 1e-4
+  grad_norm: 5.0
+  epochs: 150
+  optim:
+    name: 'AdamW'
+    args:
+      betas: [0.9, 0.98]
+  sched:
+    name: 'warmup_cosine'
+    args:
+      warmup_steps: 5000
+
+eval:
+  train:
+    name: 'ReferIt3DEval'
+  val:
+    name: 'ReferIt3DEval'
+  save: False
+
+
+# Model details
+model:
+  name: OpenVocab
+  language:
+    # This part could be further optimized to be using
+    # huggingface yaml config files
+    name: 'BERTLanguageEncoder'
+    args:
+      weights: 'bert-base-uncased'
+      hidden_size: 768
+      num_hidden_layers: 4
+      num_attention_heads: 12
+      type_vocab_size: 2
+    lr: 1e-5
+  vision:
+#    name: 'pointnet_point_encoder'
+#    args:
+#      path: None
+#      freeze: False
+    name: 'PointOpenVocabEncoder'
+    args:
+        backbone: 'pointnet++'
+        hidden_size: 768
+        freeze: True
+        path: "/scratch/masaccio/results/ALLObjPretrain_b64_Pretrain_ScanNetPretrainObj+RScanPretrainObj+ARKitScenePretrainObj+MultiScanPretrainObj+HMPretrainObj_1113real_all/2023-11-13-12:17:35.068482/ckpt/best.pth"
+        num_attention_heads: 12
+        spatial_dim: 5
+        num_layers: 4
+        dim_loc: 6
+        attn_type: spatial
+        pairwise_rel_type: 'center'
+        use_matmul_label: False
+        lang_type: 'bert'
+        lang_path: '/scratch/masaccio/607_text_embeddings'
+    lr: 1e-4
+  grounding:
+    name: 'UnifiedSpatialCrossEncoderV2'
+    args:
+      hidden_size: 768
+      num_attention_heads: 12
+      num_layers: 4
+      dim_loc: 6
+    lr: 1e-4
+  inter: before
+  heads:
+    head_list: ['ground_head']
+    pretrain_head:
+      name: 'PretrainHeadV1'
+      args:
+        hidden_size: 768
+        vocab_size: 30522
+    ground_head:
+      name: "GroundHeadV1"
+      args:
+        hidden_size: 384
+        input_size: 768
+        sem_cls_size: 607
+        dropout: 0.3
+        detach_all_aux_loss: True
+  loss_type: 'ListLoss'
+  loss_list: [
+#       'TextObjWithinBatch'
+        'og3d_loss'
+  ]
+  vis_loss_list: [
+#        'TextObjWithinBatch'
+        'og3d_loss'
+  ]
