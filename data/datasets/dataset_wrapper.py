@@ -204,3 +204,24 @@ class ScanFamilyDatasetWrapperOld(Dataset):
         ret = default_collate(batch_list)
         return ret
 
+# TODO: tmp wrapper
+@DATASETWRAPPER_REGISTRY.register()
+class VisualizeDatasetWrapper(Dataset):
+    def __init__(self, cfg, dataset, split="train"):
+        self.dataset = dataset
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        data_dict = self.dataset[idx]
+        ret = {}
+        ret['scene_pcds'] = data_dict['scene_pcds']
+        ret['item_id'] = data_dict['data_idx']
+        return ret
+
+    def collate_fn(self, batch_list):
+        ret = {}
+        ret['scene_pcds'] = [b['scene_pcds'] for b in batch_list]
+        ret['item_id'] = [b['item_id'] for b in batch_list]
+        return ret

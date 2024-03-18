@@ -4,5 +4,4 @@ from .arkitscene import *
 from .hm import *
 from .multiscan import *
 from .procthor import *
-from .spatialrefer import *
 from .structure3d import *

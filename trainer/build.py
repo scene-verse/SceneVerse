@@ -128,7 +128,7 @@ class BaseTrainer():
         self.accelerator.register_for_checkpointing(self.exp_tracker)
 
         # Check if resuming from previous checkpoint is needed
-        self.ckpt_path = Path(cfg.ckpt_path) if cfg.get("ckpt_path") else Path(cfg.exp_dir) / "ckpt" / "latest.pth"
+        self.ckpt_path = Path(cfg.ckpt_path) if cfg.get("ckpt_path") else Path(cfg.exp_dir) / "ckpt" / "best.pth"
         if cfg.resume:
             self.resume()
 

@@ -60,7 +60,7 @@ def build_dataloader(cfg, split='train'):
                           num_workers=cfg.dataloader.num_workers,
                           collate_fn=getattr(dataset.datasets[0], 'collate_fn', default_collate),
                           pin_memory=True, # TODO: Test speed
-                          prefetch_factor=2 if not cfg.debug.flag else None,
+                        #   prefetch_factor=2 if not cfg.debug.flag else None,
                           persistent_workers=True if not cfg.debug.flag else None,
                           shuffle=True,
                           drop_last=True)
@@ -73,7 +73,7 @@ def build_dataloader(cfg, split='train'):
                     num_workers=cfg.dataloader.num_workers,
                     collate_fn=getattr(dataset, 'collate_fn', default_collate),
                     pin_memory=True, # TODO: Test speed
-                    prefetch_factor=2 if not cfg.debug.flag else None,
+                    # prefetch_factor=2 if not cfg.debug.flag else None,
                     persistent_workers=True if not cfg.debug.flag else None,
                     shuffle=False))
         # TODO: temporary solution for backward compatibility.

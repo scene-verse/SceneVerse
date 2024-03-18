@@ -55,11 +55,11 @@ class ARKitSceneSpatialRefer(ScanBase):
             assert self.max_pcd_num_points is not None
         self.bg_points_num = cfg.data.args.get('bg_points_num', 1000)
 
-        sources = cfg.data.get(self.__class__.__name__).get(split).sources
+        split_cfg = cfg.data.get(self.__class__.__name__).get(split)
         all_scan_ids = self._load_split(self.split)
 
         print(f"Loading ARKitScene {split}-set language")
-        self.lang_data, self.scan_ids = self._load_lang(cfg, all_scan_ids, sources)
+        self.lang_data, self.scan_ids = self._load_lang(split_cfg, all_scan_ids)
         print(f"Finish loading ARKitScene {split}-set language of size {self.__len__()}")
 
         print(f"Loading ARKitScene {split}-set scans")
@@ -71,6 +71,8 @@ class ARKitSceneSpatialRefer(ScanBase):
             inst_labels = self.scan_data[scan_id]['inst_labels']
             self.scan_data[scan_id]['label_count'] = collections.Counter(
                                     [l for l in inst_labels])
+            self.scan_data[scan_id]['label_count_multi'] = collections.Counter(
+                                    [self.label_converter.id_to_scannetid[l] for l in inst_labels])
 
     def __len__(self):
         return len(self.lang_data)

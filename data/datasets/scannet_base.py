@@ -236,10 +236,13 @@ class ScanNetBase(Dataset):
         return scannet_scan_ids
 
     def _load_inst_info(self, scan_id):
-        inst_labels = json.load(open(os.path.join(self.base_dir, 'scan_data',
-                                                  'instance_id_to_name',
-                                                 f'{scan_id}.json'), encoding="utf-8"))
-        inst_labels = [self.cat2int[i] for i in inst_labels]
+        # inst_labels = json.load(open(os.path.join(self.base_dir, 'scan_data',
+        #                                           'instance_id_to_label',
+        #                                          f'{scan_id}.json'), encoding="utf-8"))
+        inst_labels = torch.load(os.path.join(self.base_dir, 'scan_data',
+                                                'instance_id_to_label',
+                                                f'{scan_id}.pth'))
+        inst_labels = [self.cat2int[i] for i in inst_labels.values()]
 
         inst_loc_path = os.path.join(self.base_dir, 'scan_data',
                                      'instance_id_to_loc', f'{scan_id}.npy')

@@ -1,15 +1,15 @@
 import os
-import collections
 import copy
 import json
+import jsonlines
 import random
 
 from tqdm import tqdm
 import numpy as np
+from scipy import sparse
 import torch
 from torch.utils.data import Dataset
 
-from ..build import DATASET_REGISTRY
 from ..data_utils import LabelConverter, build_rotate_mat
 from ..data_utils import convert_pc_to_box, construct_bbox_corners, \
                             merge_tokens, eval_ref_one_sample, is_explicitly_view_dependent
@@ -26,6 +26,9 @@ class ScanBase(Dataset):
         self.num_points = cfg.data.args.num_points
         self.rot_aug = cfg.data.args.rot_aug
         self.aug_cfg = getattr(cfg, 'data_aug', None)
+        self.debug = cfg.debug.flag
+        self.debug_size = cfg.debug.debug_size
+        self.subset_ratio = getattr(cfg.data.args, 'subset_ratio', 0)
         if self.aug_cfg:
             self.augmentor = DataAugmentor(self.aug_cfg, self.split)
         self.scannet_dir = cfg.data.scan_family_base
@@ -48,37 +51,31 @@ class ScanBase(Dataset):
 
     def _load_split(self, split):
         # TODO: temporarily reproducing
-        split_file = os.path.join(self.base_dir, 'annotations/splits/'+ split + "_split.txt")
         # split_file = os.path.join(self.base_dir, 'annotations/splits/'+ split + "_split_non_overlap.txt")
+        if 'scannet' in self.__class__.__name__.lower():
+            split_file = os.path.join(self.base_dir, 'annotations/splits/scannetv2_'+ split + ".txt")
+        else:
+            split_file = os.path.join(self.base_dir, 'annotations/splits/'+ split + "_split.txt")
 
         scan_ids = {x.strip() for x in open(split_file, 'r', encoding="utf-8")}
         scan_ids = sorted(scan_ids)
 
         return scan_ids
 
-    def _load_scan(self, scan_ids, is_rscan=False, filter_bkg=True):
+    def _load_scan(self, scan_ids, filter_bkg=False):
         scans = {}
         for scan_id in tqdm(scan_ids):
-            if is_rscan:
-                pcd_path = os.path.join(self.base_dir, "3RScan-ours-align",
-                                        scan_id, "pcd-align.pth")
-                lab_path = os.path.join(self.base_dir, "3RScan-ours-align",
-                                        scan_id, "inst_to_label.pth")
-            else:
-                pcd_path = os.path.join(self.base_dir, "scan_data",
-                                        "pcd-align", f"{scan_id}.pth")
-                lab_path = os.path.join(self.base_dir, "scan_data",
-                                        "instance_id_to_label",
-                                        f"{scan_id}_inst_to_label.pth")
+            pcd_path = os.path.join(self.base_dir, 'scan_data', 'pcd_with_global_alignment', f'{scan_id}.pth')
+            inst2label_path = os.path.join(self.base_dir, 'scan_data', 'instance_id_to_label', f'{scan_id}.pth')
 
             if not os.path.exists(pcd_path):
                 continue
             pcd_data = torch.load(pcd_path)
-            points, colors, instance_labels = pcd_data[0], pcd_data[1], pcd_data[2]
+            points, colors, instance_labels = pcd_data[0], pcd_data[1], pcd_data[-1]
             colors = colors / 127.5 - 1
             pcds = np.concatenate([points, colors], 1)
             # build obj_pcds
-            inst_to_label = torch.load(lab_path)
+            inst_to_label = torch.load(inst2label_path)
             obj_pcds = []
             inst_ids = []
             inst_labels = []
@@ -93,7 +90,6 @@ class ScanBase(Dataset):
                     inst_labels.append(self.cat2int[inst_to_label[inst_id]])
                     if inst_to_label[inst_id] not in ['wall', 'floor', 'ceiling']:
                         bg_indices[mask] = False
-
             if filter_bkg:
                 selected_obj_idxs = [i for i, obj_label in enumerate(inst_labels)
                                 if (self.int2cat[obj_label] not in ['wall', 'floor', 'ceiling'])]
@@ -105,9 +101,48 @@ class ScanBase(Dataset):
             scans[scan_id]['inst_labels'] = inst_labels
             scans[scan_id]['inst_ids'] = inst_ids
             scans[scan_id]['bg_pcds'] = pcds[bg_indices]
+            # calculate box for matching
+            obj_center = []
+            obj_box_size = []
+            for obj_pcd in obj_pcds:
+                _c, _b = convert_pc_to_box(obj_pcd)
+                obj_center.append(_c)
+                obj_box_size.append(_b)
+            scans[scan_id]['obj_center'] = obj_center
+            scans[scan_id]['obj_box_size'] = obj_box_size
+
+            # load pred pcds
+            obj_mask_path = os.path.join(self.base_dir, "mask", str(scan_id) + ".mask" + ".npz")
+            if os.path.exists(obj_mask_path):
+                obj_label_path = os.path.join(self.base_dir, "mask", str(scan_id) + ".label" + ".npy")
+                obj_pcds = []
+                obj_mask = np.array(sparse.load_npz(obj_mask_path).todense())[:50, :]
+                obj_labels = np.load(obj_label_path)[:50]
+                obj_l = []
+                bg_indices = np.full((pcds.shape[0], ), 1, dtype=np.bool_)
+                for i in range(obj_mask.shape[0]):
+                    mask = obj_mask[i]
+                    if pcds[mask == 1, :].shape[0] > 0:
+                        obj_pcds.append(pcds[mask == 1, :])
+                        obj_l.append(obj_labels[i])
+                        # if not self.int2cat[obj_labels[i]] in ['wall', 'floor', 'ceiling']:
+                        bg_indices[mask == 1] = False
+                scans[scan_id]['obj_pcds_pred'] = obj_pcds
+                scans[scan_id]['inst_labels_pred'] = obj_l
+                scans[scan_id]['bg_pcds_pred'] = pcds[bg_indices]
+                # calculate box for pred
+                obj_center_pred = []
+                obj_box_size_pred = []
+                for obj_pcd in obj_pcds:
+                    _c, _b = convert_pc_to_box(obj_pcd)
+                    obj_center_pred.append(_c)
+                    obj_box_size_pred.append(_b)
+                scans[scan_id]['obj_center_pred'] = obj_center_pred
+                scans[scan_id]['obj_box_size_pred'] = obj_box_size_pred
         return scans
 
-    def _load_lang(self, cfg, scan_ids, caption_source):
+    def _load_lang(self, cfg, scan_ids):
+        caption_source = cfg.sources
         json_data = []
         lang_data = []
         valid_scan_ids = []
@@ -125,32 +160,54 @@ class ScanBase(Dataset):
         for anno_type in caption_source:
             if anno_type == 'anno':
                 anno_file = os.path.join(self.base_dir, 'annotations/anno.json')
-            elif anno_type == 'gpt':
-                anno_file = os.path.join(self.base_dir, 'annotations/gpt_gen_language.json')
-            elif anno_type == 'template':
-                anno_file = os.path.join(self.base_dir, 'annotations/template_gen_language.json')
+                json_data.extend(json.load(open(anno_file, 'r', encoding='utf-8')))
+            elif anno_type == 'referit3d':
+                for anno_type in cfg.referit3d.anno_type:
+                    anno_file = os.path.join(self.base_dir,
+                                             f'annotations/refer/{anno_type}.jsonl')
+                    with jsonlines.open(anno_file, 'r') as _f:
+                        for item in _f:
+                            if len(item['tokens']) <= 24:
+                                json_data.append(item)
+                if cfg.referit3d.sr3d_plus_aug:
+                    anno_file = os.path.join(self.base_dir, 'annotations/refer/sr3d+.jsonl')
+                    with jsonlines.open(anno_file, 'r') as _f:
+                        for item in _f:
+                            if len(item['tokens']) <= 24:
+                                json_data.append(item)
+            elif anno_type == 'scanrefer':
+                anno_file = os.path.join(self.base_dir, 'annotations/refer/scanrefer.jsonl')
+                with jsonlines.open(anno_file, 'r') as _f:
+                    for item in _f:
+                        json_data.append(item)
+            elif anno_type == 'sgrefer':
+                for anno_type in cfg.sgrefer.anno_type:
+                    anno_file = os.path.join(self.base_dir,
+                                             f'annotations/refer/ssg_ref_{anno_type}.json')
+                    json_data.extend(json.load(open(anno_file, 'r', encoding='utf-8')))
+            elif anno_type == 'sgcaption':
+                for anno_type in cfg.sgcaption.anno_type:
+                    anno_file = os.path.join(self.base_dir,
+                                             f'annotations/refer/ssg_obj_caption_{anno_type}.json')
+                    json_data.extend(json.load(open(anno_file, 'r', encoding='utf-8')))
             else:
                 if 'obj_caption' in anno_type:
                     anno_file = os.path.join(self.base_dir, f'annotations/ssg_{anno_type}.json')
                 else:
-                    # TODO: temporarily reproducing
                     anno_file = os.path.join(self.base_dir, f'annotations/ssg_ref_{anno_type}.json')
-                    # anno_file = os.path.join(self.base_dir, f'annotations/ssg_refer_v0/ssg_ref_{anno_type}.json')
-
-            json_data.extend(json.load(open(anno_file, 'r', encoding='utf-8')))
+                json_data.extend(json.load(open(anno_file, 'r', encoding='utf-8')))
         for item in json_data:
             if item['scan_id'] in scan_ids and item['instance_type'] not in ['wall', 'floor', 'ceiling']:
                 lang_data.append(item)
                 if item['scan_id'] not in valid_scan_ids:
                     valid_scan_ids.append(item['scan_id'])
         valid_scan_ids = sorted(valid_scan_ids)
-        subset_ratio = getattr(cfg.data.args, 'subset_ratio', 0)
-        if subset_ratio > 0:
-            valid_scan_ids = valid_scan_ids[:int(subset_ratio*len(valid_scan_ids))]
+        if self.subset_ratio > 0:
+            valid_scan_ids = valid_scan_ids[:int(self.subset_ratio*len(valid_scan_ids))]
             lang_data = [item for item in lang_data if item['scan_id'] in valid_scan_ids]
 
-        if cfg.debug.flag and cfg.debug.debug_size != -1:
-            valid_scan_ids = valid_scan_ids[:cfg.debug.debug_size]
+        if self.debug and self.debug_size != -1:
+            valid_scan_ids = valid_scan_ids[:self.debug_size]
             lang_data = [item for item in lang_data if item['scan_id'] in valid_scan_ids]
 
         return lang_data, valid_scan_ids
@@ -286,13 +343,28 @@ class ScanBase(Dataset):
             obj_pcds = self.scan_data[scan_id]['obj_pcds'] # N, 6
             obj_labels = self.scan_data[scan_id]['inst_labels'] # N
             obj_ids = self.scan_data[scan_id]['inst_ids'] # N
+            assert tgt_object_instance in obj_ids, str(tgt_object_instance) + ' not in ' + str(obj_ids) + '-' + scan_id
+            tgt_object_id = obj_ids.index(tgt_object_instance)
         elif self.pc_type == 'pred':
             obj_pcds = self.scan_data[scan_id]['obj_pcds_pred']
+            # obj_labels = self.scan_data[scan_id]['inst_labels_pred']
+            # obj_ids = self.scan_data[scan_id]['inst_ids_pred'] # N
             obj_labels = self.scan_data[scan_id]['inst_labels_pred']
-            obj_ids = self.scan_data[scan_id]['inst_ids_pred'] # N
+            # get obj labels by matching
+            gt_obj_labels = self.scan_data[scan_id]['inst_labels'] # N
+            obj_center = self.scan_data[scan_id]['obj_center']
+            obj_box_size = self.scan_data[scan_id]['obj_box_size']
+            obj_center_pred = self.scan_data[scan_id]['obj_center_pred']
+            obj_box_size_pred = self.scan_data[scan_id]['obj_box_size_pred']
+            for i, _ in enumerate(obj_center_pred):
+                for j, _ in enumerate(obj_center):
+                    if eval_ref_one_sample(construct_bbox_corners(obj_center[j],
+                                                                  obj_box_size[j]),
+                                           construct_bbox_corners(obj_center_pred[i],
+                                                                  obj_box_size_pred[i])) >= 0.25:
+                        obj_labels[i] = gt_obj_labels[j]
+                        break
 
-        assert tgt_object_instance in obj_ids, str(tgt_object_instance) + ' not in ' + str(obj_ids) + '-' + scan_id
-        tgt_object_id = obj_ids.index(tgt_object_instance)
         # filter out background or language
         if self.filter_lang:
             if self.pc_type == 'gt':
@@ -322,6 +394,8 @@ class ScanBase(Dataset):
             tgt_object_id_iou25_list = [tgt_object_id]
             tgt_object_id_iou50_list = [tgt_object_id]
         elif self.pc_type == 'pred':
+            obj_ids = self.scan_data[scan_id]['inst_ids'] # N
+            tgt_object_id = obj_ids.index(tgt_object_instance)
             gt_pcd = self.scan_data[scan_id]["obj_pcds"][tgt_object_id]
             gt_center, gt_box_size = convert_pc_to_box(gt_pcd)
             tgt_object_id = -1
@@ -409,7 +483,8 @@ class ScanBase(Dataset):
             tgt_object_id_iou50[_id] = 1
 
         # build unique multiple
-        is_multiple = self.scan_data[scan_id]['label_count'][tgt_object_label] > 1
+        is_multiple = self.scan_data[scan_id]['label_count_multi'][self.label_converter.id_to_scannetid
+                                                                  [tgt_object_label]] > 1
         is_hard = self.scan_data[scan_id]['label_count'][tgt_object_label] > 2
 
         data_dict = {
