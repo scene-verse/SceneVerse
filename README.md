@@ -37,7 +37,7 @@
 We propose SceneVerse, the first million-scale 3D vision-language dataset with 68K 3D indoor scenes and 2.5M vision-language pairs.  We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities with our GPS (Grounded Pre-training for Scenes) model.
 
 ## News
-- [2024-03] We release the data used in SceneVerse. Fill out the [form](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU/edit?usp=drive_web) for the download link! As we are still under submission, training and inference codes/checkpoints will come shortly, stay tuned!
+- [2024-03] We release the data used in SceneVerse. Fill out the [form](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU) for the download link! As we are still under submission, training and inference codes/checkpoints will come shortly, stay tuned!
 - [2024-01] We release SceneVerse on ArXiv. Checkout our [paper](https://arxiv.org/abs/2401.09340) and [website](https://scene-verse.github.io/).
 
 ## Getting Started
@@ -50,7 +50,7 @@ $ pip install open3d
 We will provide more environment configurations for training and inference shortly, stay tuned!
 
 ## Data Download
-We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU/edit?usp=drive_web).
+We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).
 
 You should see one or multiple zip file segments for each dataset we provided. For datasets with multiple segments (e.g., ARKitScenes), you can unzip the files with:
 
