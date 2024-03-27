@@ -40,13 +40,19 @@ We propose SceneVerse, the first million-scale 3D vision-language dataset with 6
 - [2024-03] We release the data used in SceneVerse. Fill out the [form](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU/edit?usp=drive_web) for the download link! As we are still under submission, training and inference codes/checkpoints will come shortly, stay tuned!
 - [2024-01] We release SceneVerse on ArXiv. Checkout our [paper](https://arxiv.org/abs/2401.09340) and [website](https://scene-verse.github.io/).
 
-## TODO
-
+## Getting Started
+For data browsing, we experimented with NVIDIA CUDA 11.8 on Ubuntu 22.04 and require the following steps:
+```shell
+$ conda create -n sceneverse python=3.9
+$ pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cu118
+$ pip install open3d
+```
+We will provide more environment configurations for training and inference shortly, stay tuned!
 
 ## Data Download
 We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU/edit?usp=drive_web).
 
-For each dataset we provided, you should see one or multiple zip file segments. For datasets with multiple segments (e.g., ARKitScenes), you can unzip the files with:
+You should see one or multiple zip file segments for each dataset we provided. For datasets with multiple segments (e.g., ARKitScenes), you can unzip the files with:
 
 ```shell
 # Directories with multiple zip segments
@@ -58,7 +64,8 @@ $ cd ARKitScenes/
 $ zip -F ARKitScenes.zip --out combined.zip
 $ unzip combined.zip
 ```
-After unzipping, files are organized as:
+
+After unzipping, the files are organized as:
 ```shell
 ARKitScenes/
 |-- scan_data                   # Point cloud data
@@ -71,7 +78,8 @@ ARKitScenes/
   |-- <language_type>.json      # For datasets except for ScanNet, language for ScanNet is located at annotations/refer
 ```
 
-We also provide a short script for visualizing scene and language data, you can use it like
+
+We also provide a short script for visualizing scene and language data, you can use it with:
 ```shell
 # Visualize scene and instance data
 $ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET>
@@ -79,7 +87,7 @@ $ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET>
 $ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET> --vis_refer
 ```
 
-As our data contains scenes from existing datasets, please read carefully about the term of use for each dataset in the license information we provided.
+As our data contains scenes from existing datasets, please read carefully about the term of use for each dataset we provided in the form.
 
 
 ## BibTex
