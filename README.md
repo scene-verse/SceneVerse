@@ -49,7 +49,8 @@ $ pip install open3d
 ```
 We will provide more environment configurations for training and inference shortly, stay tuned!
 
-## Data Download
+## Data
+### Data Download
 We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).
 
 You should see one or multiple zip file segments for each dataset we provided. For datasets with multiple segments (e.g., ARKitScenes), you can unzip the files with:
@@ -78,6 +79,7 @@ ARKitScenes/
   |-- <language_type>.json      # For datasets except for ScanNet, language for ScanNet is located at annotations/refer
 ```
 
+### Data Visualization
 
 We also provide a short script for visualizing scene and language data, you can use it with:
 ```shell
@@ -88,6 +90,24 @@ $ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET> --vis_r
 ```
 
 As our data contains scenes from existing datasets, please read carefully about the term of use for each dataset we provided in the form.
+
+### Provided Language Types
+
+We list the available data in the current version of SceneVerse in the table below:
+
+|   Dataset    | Object Caption | Scene Caption | Ref-Annotation   | Ref-Pairwise<br>```rel2``` | Ref-MultiObject<br>```relm``` | Ref-Star<br>```star``` | Ref-Chain (Optional)<br>```chain``` |
+|:------------:|:--------------:|:-------------:|------------------|-------------------------|-------------------------------|-----------------------|------------------------------------|
+|   ScanNet    |       ✅        |       ✅       | ScanRefer<br>Nr3D | ✅              | ✅                             | ✅           | ✅       |
+|  MultiScan   |       ✅        |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
+| ARKitScenes  |       ✅        |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
+|     HM3D     |       ✅        |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
+|    3RScan    |       ✅        |       ✅       | ❌ | ✅              | ✅                             | ✅           | ✅       |
+| Structured3D |  ```template```   |       ✅       | ❌ | ✅              | ✅                             | ✅           |    ❌     |
+|   ProcTHOR   |  ```template```   |    ❌     | ❌ | ✅              | ```template```                   | ```template```            |    ❌     |
+
+For the remaining data, we hope to further refine and update our data in the following weeks, stay tuned!
+
+
 
 
 ## BibTex
