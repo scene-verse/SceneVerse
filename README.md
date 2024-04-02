@@ -103,7 +103,7 @@ We list the available data in the current version of SceneVerse in the table bel
 |     HM3D     |       ✅        |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
 |    3RScan    |       ✅        |       ✅       | ❌ | ✅              | ✅                             | ✅           | ✅       |
 | Structured3D |  ```template```   |       ✅       | ❌ | ✅              | ✅                             | ✅           |    ❌     |
-|   ProcTHOR   |  ```template```   |    ❌     | ❌ | ✅              | ```template```                   | ```template```            |    ❌     |
+|   ProcTHOR   |  ```template```   |    ❌     | ❌ | ```template```              | ```template```                   | ```template```            |    ❌     |
 
 For the generated object referrals, we provide both the direct template-based generations ```template``` and the LLM-refined versions ```gpt```.
 Please refer to our supplementary for the description of selected ```pair-wise``` / ```multi-object``` / ```star``` types. We also
