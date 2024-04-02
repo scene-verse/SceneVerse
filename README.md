@@ -105,6 +105,12 @@ We list the available data in the current version of SceneVerse in the table bel
 | Structured3D |  ```template```   |       ✅       | ❌ | ✅              | ✅                             | ✅           |    ❌     |
 |   ProcTHOR   |  ```template```   |    ❌     | ❌ | ✅              | ```template```                   | ```template```            |    ❌     |
 
+For the generated object referrals, we provide both the direct template-based generations ```template``` and the LLM-refined versions ```gpt```.
+Please refer to our supplementary for the description of selected ```pair-wise``` / ```multi-object``` / ```star``` types. We also
+provide the ```chain``` type which contains language using obejct A to refer B and then B to refer the target object C. As we found 
+the ```chain``` type could sometimes lead to unnatural descriptions, we did not discuss it in the main paper. Feel free to inspect
+and use it in your projects.
+
 For the remaining data, we hope to further refine and update our data in the following weeks, stay tuned!
 
 
