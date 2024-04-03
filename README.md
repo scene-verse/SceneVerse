@@ -45,7 +45,7 @@ For data browsing, we experimented with NVIDIA CUDA 11.8 on Ubuntu 22.04 and req
 ```shell
 $ conda create -n sceneverse python=3.9
 $ pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cu118
-$ pip install open3d
+$ pip install numpy open3d
 ```
 We will provide more environment configurations for training and inference shortly, stay tuned!
 
