@@ -50,6 +50,9 @@ $ pip install numpy open3d
 We will provide more environment configurations for training and inference shortly, stay tuned!
 
 ## Data
+
+* Note: As some of our users requested the mapping between HM3D object id in SceneVerse to HM3D-semantics, we have added an additional file ```sceneverse2hmsemantic.py``` to obtain this mapping. When running with the target HM3D-semantics scenes, it will generate a dictionary of ```{<sceneverse_objid>:[hm3d_objid, hm3d_label]}``` for each scene.
+
 ### Data Download
 We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).
 
