@@ -4,10 +4,10 @@ We have released a preprocessing script for 3RScan designed to provide a compreh
 
 - Import raw meshes and annotations from each dataset.  
 - Extract vertices from the mesh and assign both instance and semantic labels to them.  
-- Map the dataset-specific semantic labels to ScanNet 607. This is optional for SceneVerse training but may be required for closed-vocab training.
-- Axis Alignment: Rotate the 3D point clouds so that most 3D object bounding boxes are axis-aligned. This follows ScanRefer, and is currently implemented as a heuristic search.  
-- Translation Alignment: Translate the 3D point clouds so that its origin at the center on the floor.  
-- Color Alignment: The color value should be within the [0, 255] range.
+- Map the dataset-specific semantic labels to ScanNet 607. This is optional for SceneVerse training but may be required for closed-vocab training ([example](https://github.com/scene-verse/SceneVerse/blob/b936f96b61614bec32282e5eed7de844d1a7a330/preprocess/rscan.py#L58)).
+- Axis Alignment: Rotate the 3D point clouds so that most 3D object bounding boxes are axis-aligned. This follows ScanRefer, and is currently implemented as a heuristic search ([example](https://github.com/scene-verse/SceneVerse/blob/b936f96b61614bec32282e5eed7de844d1a7a330/preprocess/rscan.py#L95)).  
+- Translation Alignment: Translate the 3D point clouds so that its origin at the center on the floor ([example](https://github.com/scene-verse/SceneVerse/blob/b936f96b61614bec32282e5eed7de844d1a7a330/preprocess/rscan.py#L102)).  
+- Color Alignment: The color value should be within the [0, 255] range ([example](https://github.com/scene-verse/SceneVerse/blob/b936f96b61614bec32282e5eed7de844d1a7a330/preprocess/rscan.py#L98)).
 - Point subsampling: subsample the point clouds if the number of points exceeds 240K.
     ```python
     PTS_LIMIT = 240000
