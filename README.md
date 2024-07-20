@@ -95,6 +95,10 @@ $ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET> --vis_r
 
 As our data contains scenes from existing datasets, please read carefully about the term of use for each dataset we provided in the form.
 
+### Data Processing
+
+We release a data preprocessing exemplar for 3RScan, with more details [here](preprocess/README.md).
+
 ### Provided Language Types
 
 We list the available data in the current version of SceneVerse in the table below:
