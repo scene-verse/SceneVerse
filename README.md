@@ -37,6 +37,8 @@
 We propose SceneVerse, the first million-scale 3D vision-language dataset with 68K 3D indoor scenes and 2.5M vision-language pairs.  We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities with our GPS (Grounded Pre-training for Scenes) model.
 
 ## News
+- [2024-07] Training & Inference code as well as preprocessing code is released and checkpoints & logs are on the way!
+- [2024-07] Preprocessing codes for scenes used in SceneVerse are released.
 - [2024-07] SceneVerse is accepted by ECCV 2024! Training and inference codes/checkpoints will come shortly, stay tuned!
 - [2024-03] We release the data used in SceneVerse. Fill out the [form](https://forms.gle/AXMk7MH6bFXpCqd99) for the download link!
 - [2024-01] We release SceneVerse on ArXiv. Checkout our [paper](https://arxiv.org/abs/2401.09340) and [website](https://scene-verse.github.io/).
@@ -48,7 +50,9 @@ $ conda create -n sceneverse python=3.9
 $ pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cu118
 $ pip install numpy open3d
 ```
-We will provide more environment configurations for training and inference shortly, stay tuned!
+For training and inference, we provide instructions for using our code base [here](TRAIN.md). It also contains codes for
+creating the virtual environment, so if you have already created one for visualization, you can directly install all
+requirements via ```requirements.txt```.
 
 ## Data
 
