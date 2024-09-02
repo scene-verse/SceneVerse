@@ -37,6 +37,7 @@
 We propose SceneVerse, the first million-scale 3D vision-language dataset with 68K 3D indoor scenes and 2.5M vision-language pairs.  We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities with our GPS (Grounded Pre-training for Scenes) model.
 
 ## News
+- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-09] The scripts for scene graph generation are released.
 - ![](https://img.shields.io/badge/New!-8A2BE2) [2024-07] Training & Inference code as well as preprocessing code is released and checkpoints & logs are on the way!
 - ![](https://img.shields.io/badge/New!-8A2BE2) [2024-07] Preprocessing codes for scenes used in SceneVerse are released.
 - [2024-07] SceneVerse is accepted by ECCV 2024! Training and inference codes/checkpoints will come shortly, stay tuned!
@@ -62,6 +63,10 @@ requirements via ```requirements.txt```.
 
 We have released the data preprocessing scripts for 3RScan, MultiScan and ARKitScenes, with more details [here](preprocess/README.md).
 
+
+### Scene Graph Generation
+
+We have released the scripts to generate 3D scene graphs for the datasets released in SceneVerse, with more details [here](preprocess/ssg/README.md).
 
 ### Data Download
 We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).
