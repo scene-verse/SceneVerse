@@ -60,7 +60,7 @@ requirements via ```requirements.txt```.
 
 ### Data Processing
 
-We release a data preprocessing exemplar for 3RScan, with more details [here](preprocess/README.md).
+We have released the data preprocessing scripts for 3RScan, MultiScan and ARKitScenes, with more details [here](preprocess/README.md).
 
 
 ### Data Download

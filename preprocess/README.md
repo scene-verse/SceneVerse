@@ -1,6 +1,6 @@
 ## Data Processing
 
-We have released a preprocessing script for 3RScan designed to provide a comprehensive framework for data preparation. The process involves the following steps:
+We have released the preprocessing scripts for 3RScan, MultiScan and ARKitScenes. They are designed to provide a comprehensive framework for data preparation. Taing the 3RScan as an example, the process involves the following steps:
 
 - Import raw meshes and annotations from each dataset.  
 - Extract vertices from the mesh and assign both instance and semantic labels to them.  
