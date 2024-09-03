@@ -29,7 +29,8 @@ $ python rscan.py
 Adjust the `data_root`, `save_root` and `num_workers` accordingly.
 
 ### HM3D
-We release a script to generate the mapping between HM3D object id in SceneVerse to HM3D-semantics in ```sceneverse2hmsemantic.py```. When running with the target HM3D-semantics scenes, it will generate a dictionary of ```{<sceneverse_objid>:[hm3d_objid, hm3d_label]}``` for each scene.
+As some of our users requested the mapping between HM3D object id in SceneVerse to HM3D-semantics, we have added an additional file ([HM3D_tgtID2objID.zip](assets/HM3D_tgtID2objID.zip)) to obtain this mapping. The json file for each scene contains a dictionary of ```{<sceneverse_objid>:[hm3d_objid, hm3d_label]}```.
+* Note: The script ```sceneverse2hmsemantic.py``` has been deprecated as it cannot reproduce the mappings above. It currently points out how we read the semantics from the annotations in HM3D-semantics.
 
 
 ## Prepare for your custom datasets

@@ -57,7 +57,7 @@ requirements via ```requirements.txt```.
 
 ## Data
 
-* Note: As some of our users requested the mapping between HM3D object id in SceneVerse to HM3D-semantics, we have added an additional file ```sceneverse2hmsemantic.py``` to obtain this mapping. When running with the target HM3D-semantics scenes, it will generate a dictionary of ```{<sceneverse_objid>:[hm3d_objid, hm3d_label]}``` for each scene.
+* Note: As some of our users requested the mapping between HM3D object id in SceneVerse to HM3D-semantics, we have added an additional file ([HM3D_tgtID2objID.zip](assets/HM3D_tgtID2objID.zip)) to obtain this mapping. The json file for each scene contains a dictionary of ```{<sceneverse_objid>:[hm3d_objid, hm3d_label]}```.
 
 ### Data Processing
 
