@@ -61,12 +61,12 @@ requirements via ```requirements.txt```.
 
 ### Data Processing
 
-We have released the data preprocessing scripts for 3RScan, MultiScan and ARKitScenes, with more details [here](preprocess/README.md).
+We have released the data preprocessing scripts for 3RScan, MultiScan and ARKitScenes, with more details [here](preprocess).
 
 
 ### Scene Graph Generation
 
-We have released the scripts to generate 3D scene graphs for the datasets released in SceneVerse, with more details [here](preprocess/ssg/README.md).
+We have released the scripts to generate 3D scene graphs for the datasets released in SceneVerse, with more details [here](preprocess/ssg).
 
 ### Data Download
 We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).

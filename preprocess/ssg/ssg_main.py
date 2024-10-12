@@ -82,7 +82,7 @@ def generate_object_info(save_root, scene_name) :
 
     obj_pcds = []
     for i in np.unique(instance_labels):
-        if i <= 0:
+        if i < 0:
             continue
         mask = instance_labels == i     # time consuming
         obj_pcds.append((pcds[mask], inst_to_label[int(i)], i))
