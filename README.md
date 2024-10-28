@@ -37,97 +37,20 @@
 We propose SceneVerse, the first million-scale 3D vision-language dataset with 68K 3D indoor scenes and 2.5M vision-language pairs.  We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities with our GPS (Grounded Pre-training for Scenes) model.
 
 ## News
-- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-07] Training & Inference code as well as preprocessing code is released and checkpoints & logs are on the way!
-- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-07] Preprocessing codes for scenes used in SceneVerse are released.
+- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-10] Pre-trained checkpoints are now available, find detailed instructions in [TRAIN.md](TRAIN.md)!
+- [2024-07] Training & Inference code as well as preprocessing code is released and checkpoints & logs are on the way!
+- [2024-07] Preprocessing codes for scenes used in SceneVerse are released.
 - [2024-07] SceneVerse is accepted by ECCV 2024! Training and inference codes/checkpoints will come shortly, stay tuned!
 - [2024-03] We release the data used in SceneVerse. Fill out the [form](https://forms.gle/AXMk7MH6bFXpCqd99) for the download link!
 - [2024-01] We release SceneVerse on ArXiv. Checkout our [paper](https://arxiv.org/abs/2401.09340) and [website](https://scene-verse.github.io/).
 
-## Getting Started
-For data browsing, we experimented with NVIDIA CUDA 11.8 on Ubuntu 22.04 and require the following steps:
-```shell
-$ conda create -n sceneverse python=3.9
-$ pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cu118
-$ pip install numpy open3d
-```
-For training and inference, we provide instructions for using our code base [here](TRAIN.md). It also contains codes for
-creating the virtual environment, so if you have already created one for visualization, you can directly install all
-requirements via ```requirements.txt```.
-
 ## Data
+See [DATA.md](DATA.md) for detailed instructions on data download, processing, visualization and the inventory for available data.
 
-* Note: As some of our users requested the mapping between HM3D object id in SceneVerse to HM3D-semantics, we have added an additional file ```sceneverse2hmsemantic.py``` to obtain this mapping. When running with the target HM3D-semantics scenes, it will generate a dictionary of ```{<sceneverse_objid>:[hm3d_objid, hm3d_label]}``` for each scene.
+## Training and Inference
 
-### Data Processing
-
-We release a data preprocessing exemplar for 3RScan, with more details [here](preprocess/README.md).
-
-
-### Data Download
-We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).
-
-You should see one or multiple zip file segments for each dataset we provided. For datasets with multiple segments (e.g., ARKitScenes), you can unzip the files with:
-
-```shell
-# Directories with multiple zip segments
-$ ls ARKitScenes/
-  -> ARKitScenes.zip  ARKitScenes.z01
-
-# Unzip from all zip segments
-$ cd ARKitScenes/
-$ zip -F ARKitScenes.zip --out combined.zip
-$ unzip combined.zip
-```
-
-After unzipping, the files are organized as:
-```shell
-ARKitScenes/
-|-- scan_data                   # Point cloud data
-  |-- instance_id_to_label      # Reorganized instance id to label mapping
-  |-- pcd_with_global_alignment # Aligned scene point clouds
-|-- annotations                 # Language annotations
-  |-- splits
-    |-- train_split.txt         # For all datasets, we provide training split
-    |-- val_split.txt           # For datasets with evaluation sets
-  |-- <language_type>.json      # For datasets except for ScanNet, language for ScanNet is located at annotations/refer
-```
-
-### Data Visualization
-
-We also provide a short script for visualizing scene and language data, you can use it with:
-```shell
-# Visualize scene and instance data
-$ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET>
-# Visualize language data
-$ python visualize_data.py --root <PATH_TO_DOWNLOAD> --dataset <DATASET> --vis_refer
-```
-
-As our data contains scenes from existing datasets, please read carefully about the term of use for each dataset we provided in the form.
-
-### Provided Language Types
-
-We list the available data in the current version of SceneVerse in the table below:
-
-|   Dataset    | Object Caption | Scene Caption | Ref-Annotation   | Ref-Pairwise<br>```rel2``` | Ref-MultiObject<br>```relm``` | Ref-Star<br>```star``` | Ref-Chain (Optional)<br>```chain``` |
-|:------------:|:--------------:|:-------------:|------------------|-------------------------|-------------------------------|-----------------------|------------------------------------|
-|   ScanNet    |       ✅        |       ✅       | ScanRefer<br>Nr3D | ✅              | ✅                             | ✅           | ✅       |
-|  MultiScan   |       ✅        |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
-| ARKitScenes  |       ✅        |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
-|     HM3D     |  ```template```   |       ✅       | ✅ | ✅              | ✅                             | ✅           | ✅       |
-|    3RScan    |       ✅        |       ✅       | ❌ | ✅              | ✅                             | ✅           | ✅       |
-| Structured3D | ```template``` |       ✅       | ❌ | ✅              | ✅                             | ✅           |    ❌     |
-|   ProcTHOR   | ```template``` |    ❌     | ❌ | ```template```              | ```template```                   | ```template```            |    ❌     |
-
-For the generated object referrals, we provide both the direct template-based generations ```template``` and the LLM-refined versions ```gpt```.
-Please refer to our supplementary for the description of selected ```pair-wise``` / ```multi-object``` / ```star``` types. We also
-provide the ```chain``` type which contains language using obejct A to refer B and then B to refer the target object C. As we found 
-the ```chain``` type could sometimes lead to unnatural descriptions, we did not discuss it in the main paper. Feel free to inspect
-and use it in your projects.
-
-For the remaining data, we hope to further refine and update our data in the following weeks, stay tuned!
-
-
-
+See [TRAIN.md](TRAIN.md) for the inventory of available checkpoints and detailed instructions on training and testing 
+with pre-trained checkpoints.
 
 ## BibTex
 ```bibtex
@@ -138,3 +61,15 @@ For the remaining data, we hope to further refine and update our data in the fol
   year={2024}
 }
 ```
+
+## Acknowledgements
+We thank the authors from [ScanRefer](https://github.com/daveredrum/ScanRefer), 
+[ScanNet](https://github.com/ScanNet/ScanNet), 
+[3RScan](https://github.com/WaldJohannaU/3RScan), [ReferIt3D](https://github.com/referit3d/referit3d), 
+[Structured3D](https://github.com/bertjiazheng/Structured3D), 
+[HM3D](https://github.com/matterport/habitat-matterport-3dresearch),
+[ProcTHOR](https://github.com/allenai/procthor),
+[ARKitScenes](https://github.com/apple/ARKitScenes), [MultiScan](https://github.com/smartscenes/multiscan) for
+open-sourcing their awesome datasets. We also heavily adapted codes from [ScanQA](https://github.com/ATR-DBI/ScanQA), 
+[SQA3D](https://github.com/SilongYong/SQA3D), and 
+[3D-VisTA](https://github.com/3d-vista/3D-VisTA) for training and inference.
