@@ -38,6 +38,7 @@ We propose SceneVerse, the first million-scale 3D vision-language dataset with 6
 
 ## News
 - ![](https://img.shields.io/badge/New!-8A2BE2) [2024-10] Pre-trained checkpoints are now available, find detailed instructions in [TRAIN.md](TRAIN.md)!
+- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-09] The scripts for scene graph generation are released.
 - [2024-07] Training & Inference code as well as preprocessing code is released and checkpoints & logs are on the way!
 - [2024-07] Preprocessing codes for scenes used in SceneVerse are released.
 - [2024-07] SceneVerse is accepted by ECCV 2024! Training and inference codes/checkpoints will come shortly, stay tuned!
@@ -48,7 +49,6 @@ We propose SceneVerse, the first million-scale 3D vision-language dataset with 6
 See [DATA.md](DATA.md) for detailed instructions on data download, processing, visualization and the inventory for available data.
 
 ## Training and Inference
-
 See [TRAIN.md](TRAIN.md) for the inventory of available checkpoints and detailed instructions on training and testing 
 with pre-trained checkpoints.
 

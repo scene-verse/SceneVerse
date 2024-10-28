@@ -39,7 +39,7 @@ class RScanProcessor(ProcessorBase):
         scan_ids = [path.split('/')[-1] for path in scan_paths]
         return scan_ids
 
-    def process_point_cloud(self, scan_id, plydata, annotations, output):
+    def process_point_cloud(self, scan_id, plydata, annotations):
         plylabel, segments, aggregation = annotations
         vertices = plydata.vertices
         vertex_colors = trimesh.visual.uv_to_color(plydata.visual.uv, plydata.visual.material.image)
@@ -105,7 +105,7 @@ class RScanProcessor(ProcessorBase):
         assert vertex_colors.shape == vertices.shape
         assert vertex_colors.shape[0] == vertex_instance.shape[0]
 
-        if self.check_key(output.pcd):
+        if self.check_key(self.output.pcd):
             torch.save(inst_to_label, self.inst2label_path / f"{scan_id}.pth")
             torch.save((vertices, vertex_colors, vertex_instance), self.pcd_path / f"{scan_id}.pth")
             np.save(self.pcd_path / f"{scan_id}_align_angle.npy", align_angle)
@@ -122,7 +122,7 @@ class RScanProcessor(ProcessorBase):
             aggregation = json.load(f)
 
         # process point cloud
-        self.process_point_cloud(scan_id, plydata, (plylabel, segments, aggregation), self.output)
+        self.process_point_cloud(scan_id, plydata, (plylabel, segments, aggregation))
 
     def process_scans(self):
         scan_ids = self.read_all_scans()
