@@ -1,6 +1,6 @@
 ## Data Processing
 
-We have released the preprocessing scripts for 3RScan, MultiScan and ARKitScenes. They are designed to provide a comprehensive framework for data preparation. Taing the 3RScan as an example, the process involves the following steps:
+We have released the preprocessing scripts for 3RScan, MultiScan and ARKitScenes. They are designed to provide a comprehensive framework for data preparation. Taking 3RScan as an example, the process involves the following steps:
 
 - Import raw meshes and annotations from each dataset.  
 - Extract vertices from the mesh and assign both instance and semantic labels to them.  
@@ -35,3 +35,6 @@ As some of our users requested the mapping between HM3D object id in SceneVerse 
 
 ## Prepare for your custom datasets
 To prepare your custom data for inference, follow the previous steps and  the example script for 3RScan. A convenient way for verification is to use the `visualize_data.py`. If everything is correct, you should observe the colored point clouds displayed similarly to those in the released version of SceneVerse.
+
+## Scene Graph Generation
+We also release the [scripts](preprocess/ssg/README.md) for 3D scene graph generation.
