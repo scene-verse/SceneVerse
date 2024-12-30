@@ -37,8 +37,9 @@
 We propose SceneVerse, the first million-scale 3D vision-language dataset with 68K 3D indoor scenes and 2.5M vision-language pairs.  We demonstrate the scaling effect by (i) achieving state-of-the-art on all existing 3D visual grounding benchmarks and (ii) showcasing zero-shot transfer capabilities with our GPS (Grounded Pre-training for Scenes) model.
 
 ## News
-- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-10] Pre-trained checkpoints are now available, find detailed instructions in [TRAIN.md](TRAIN.md)!
-- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-09] The scripts for scene graph generation are released.
+- ![](https://img.shields.io/badge/New!-8A2BE2) [2024-12] Our follow-up work on situated question answering on SceneVerse is out, check it out [here](https://msr3d.github.io/)!
+- [2024-10] Pre-trained checkpoints are now available, find detailed instructions in [TRAIN.md](TRAIN.md)!
+- [2024-09] The scripts for scene graph generation are released.
 - [2024-07] Training & Inference code as well as preprocessing code is released and checkpoints & logs are on the way!
 - [2024-07] Preprocessing codes for scenes used in SceneVerse are released.
 - [2024-07] SceneVerse is accepted by ECCV 2024! Training and inference codes/checkpoints will come shortly, stay tuned!
@@ -74,6 +75,7 @@ with pre-trained checkpoints. The checkpoint inventory is listed below:
 | ```text-ablation```  | Ablations on the type of language used during pre-training              | Ablation on Text (Tab.7)                            | [Template only](https://drive.google.com/drive/folders/1Xo6FkbThHP3uLUJMblt3zgJiM0n3RbVK?usp=sharing), [Template+LLM](https://drive.google.com/drive/folders/1w9Oi8nWKZXOW3BcA0eiC1bgp7snk8ZKS?usp=sharing)                                                                                                      |
 | ```scene-ablation``` | Ablations on the use of synthetic scenes during pre-training            | Ablation on Scene (Tab.8)                           | [Real only](https://drive.google.com/drive/folders/1WZDf2BS7eG36NgGEdTuChICmVHF377is?usp=sharing), [S3D only](https://drive.google.com/drive/folders/1Zh4QfCs6l67ZeltvzOPZtokKkgkvxATc?usp=sharing), [ProcTHOR only](https://drive.google.com/drive/folders/1H9zm7vYxVn_zd2HYi49Js9R34AHnGi1d?usp=sharing)                                                                                                                                                                                                                                                                   |
 | ```model-ablation``` | Ablations on the use of losses during pre-training                      | Ablation on Model Design (Tab.9)                    | [Refer only](https://drive.google.com/drive/folders/1yKF8dVPlcbKb-COcfUZbwcqWxt_uvzuc?usp=sharing), [Refer+Obj-lvl](https://drive.google.com/drive/folders/1C5L20UvTQj2my2t0BnqHZPsb_VaXxVjX?usp=sharing), [w/o Scene-lvl](https://drive.google.com/drive/folders/14jR43ils1-jop6K84hu1AqPqU9DcHucx?usp=sharing) |
+| ```3d-qa```          | Results for QA fine-tuning on ScanQA and SQA3D                          | 3D-QA Experiments (Tab.5)                           | [ScanQA](https://drive.google.com/drive/folders/1_Qluyeu-gvfyQSRoPNcPg7qss5IxFRwO?usp=sharing), [SQA3D](https://drive.google.com/drive/folders/1DGVqsqP12Y2Un10UAC5u9HLij0NJVzJC?usp=sharing)                                                                                                    |
 
 
 ## BibTex
