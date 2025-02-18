@@ -10,7 +10,7 @@ We release a data preprocessing exemplar for 3RScan, MultiScan and ARKitScenes, 
 We also release the [scripts](preprocess/ssg/README.md) for scene graph generation.
 
 ### Data Download
-We currently host our data on G-drive and request all applicants to fill out the form from [here](https://docs.google.com/forms/d/1x8cCAkn86d6MyyY5PMvvS_qRrH7dV8_RKHeBX9sE3KU).
+We currently host our data on G-drive and request all applicants to fill out the form from [here](https://forms.gle/AXMk7MH6bFXpCqd99).
 
 You should see one or multiple zip file segments for each dataset we provided. For datasets with multiple segments (e.g., ARKitScenes), you can unzip the files with:
 
