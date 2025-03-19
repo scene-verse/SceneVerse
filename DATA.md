@@ -5,7 +5,7 @@
 
 ### Data Processing
 
-We release a data preprocessing exemplar for 3RScan, MultiScan and ARKitScenes, with more details [here](preprocess/README.md).
+We release a data preprocessing exemplar for 3RScan, MultiScan, ARKitScenes and Structured3D, with more details [here](preprocess/README.md).
 
 We also release the [scripts](preprocess/ssg/README.md) for scene graph generation.
 
